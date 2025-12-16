@@ -57,16 +57,23 @@ class Snake:
     def game_over(self) -> bool:
         if self.lost: return True
 
-        for part in self.body:
-            x = part.x * CELL_SIZE
-            y = part.y * CELL_SIZE
-            if x >= WIDTH or x < 0 or y < 0 or y >= HEIGHT:
-                return True
+        head = self.body[0]
+        x = head.x * CELL_SIZE
+        y = head.y * CELL_SIZE
+        if x >= WIDTH or x < 0 or y < 0 or y >= HEIGHT:
+            return True
         return False
 
     def grow(self):
         last_part = self.body[-1]
-        new_part = pygame.Vector2(last_part.x - self.direction.x, last_part.y - self.direction.y)
+        prev_part = self.body[-2]
+
+        if last_part + DOWN == prev_part: direction = DOWN
+        elif last_part + UP == prev_part: direction = UP
+        elif last_part + RIGHT == prev_part: direction = RIGHT
+        else: direction = LEFT
+
+        new_part = last_part - direction
         self.body.append(new_part)
 
     def update(self):

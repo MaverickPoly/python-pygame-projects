@@ -2,7 +2,7 @@ from settings import *
 
 
 class Fruit:
-    def __init__(self, row: int, col: int):
+    def __init__(self, row: float, col: float):
         self.position = pygame.Vector2(row, col)
 
     def draw(self, surface: pygame.Surface):

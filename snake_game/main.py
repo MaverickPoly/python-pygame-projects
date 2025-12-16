@@ -61,11 +61,19 @@ class Game:
             # FIXME^  Sometimes fruit is not respawning
             self.score += 1
             self.snake.grow()
-            new_position = pygame.Vector2(random.randint(1, COLS), random.randint(1, ROWS))
-            while self.snake.contains_part(new_position):
-                new_position = pygame.Vector2(random.randint(1, COLS), random.randint(1, ROWS))
-            self.fruit = Fruit(int(new_position.x), int(new_position.y))
-            print(self.fruit.position.x, self.fruit.position.y)
+
+            free_cells: list[pygame.Vector2] = []
+            for row in range(ROWS):
+                for col in range(COLS):
+                    pos = pygame.Vector2(row, col)
+                    if not self.snake.contains_part(pos):
+                        free_cells.append(pos)
+
+            if free_cells:
+                new_position = random.choice(free_cells)
+                self.fruit = Fruit(new_position.x, new_position.y)
+            else:
+                self.game_over = True
 
     def draw(self):
         self.draw_background()
